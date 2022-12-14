@@ -27,6 +27,10 @@ iteration of it we will use it track indoor and outdoor runs.
       - Community Edition (Has some limitations)
     - Visual Studio Code
     - Spring Tool Suite
+  - API Testing Tool (One of the following)
+    - [Postman](https://www.postman.com/product/rest-client/)
+    - [HTTPie](https://httpie.io/)
+    - [curl](https://curl.se/)
 
 ## Agenda
 
