@@ -63,41 +63,148 @@ earlier.
 - `@ComponentScan(basePackages = {"dev.danvega"})`
 - `@SpringBootApplication(scanBasePackages = {"dev.danvega"})`
 - `Arrays.stream(context.getBeanDefinitionNames()).forEach(System.out::println);`
-- IntelliJ Beans
+- View the definitions of the Spring beans used in your project, and see how they are related to other beans, in the Spring tool window.
 
 ## Dependency Injection & IoC
 
 Now that you understand what Beans and the container are we can talk about Dependency Injection (DI) and Inversion of
-Control (IoC). 
-
-Dependency injection (DI) is a process whereby objects define their dependencies (that is, the other objects with which they work) only through constructor arguments, arguments to a factory method, or properties that are set on the object instance after it is constructed or returned from a factory method. The container then injects those dependencies when it creates the bean.
+Control (IoC). Dependency injection (DI) is a process whereby objects define their dependencies (that is, the other objects with which they work) only through constructor arguments, arguments to a factory method, or properties that are set on the object instance after it is constructed or returned from a factory method. The container then injects those dependencies when it creates the bean.
 
 - Demo 
 - Write a test
+- `@Autowired`
 
 [Spring Constructor Injection: Why is it the recommended approach to Dependency Injection?](https://youtu.be/aX-bgylmprA)
 
 ## Configuration
 
+Spring Boot lets you externalize your configuration so that you can work with the same application code in different environments. You can use a variety of external configuration sources, include Java properties files, YAML files, environment variables, and command-line arguments.
+
 - application.properties / application.yml
+  -  If you have configuration files with both .properties and .yml format in the same location, .properties takes precedence.
 - Externalized Configuration (Property Sources)
+  - https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config
+- Injecting values into your code
+- Configuration Properties
+- `spring.config.import=optional:secrets.properties`
+- `@Configuration(proxyBeanMethods = false)`
 
 ## Profiles
 
+Spring Profiles provide a way to segregate parts of your application configuration and make it be available only in certain environments. Any @Component, @Configuration or @ConfigurationProperties can be marked with @Profile to limit when it is loaded, as shown in the following example:
+
+```java
+@Configuration(proxyBeanMethods = false)
+@Profile("production")
+public class ProductionConfiguration {
+
+    // ...
+
+}
+```
+
 - What are profiles
-- Why would you want to use them? 
+- Why would you want to use them?
+  - application-dev.properties
+  - application-prod.properties
+- Run the application show default profile
+- `spring.profiles.active=dev,local`
 
-## Actuator
 
-- What is the Spring Boot Actuator?
-- How to add it to your application 
-- How to configure it
+### Multi-Document Files
+
+Spring Boot allows you to split a single physical file into multiple logical documents which are each added independently. Documents are processed in order, from top to bottom. Later documents can override the properties defined in earlier ones.
+
+For application.yml files, the standard YAML multi-document syntax is used. Three consecutive hyphens represent the end of one document, and the start of the next.
+
+For example, the following file has two logical documents:
+
+```yaml
+spring:
+  application:
+    name: "MyApp"
+---
+spring:
+  application:
+    name: "MyCloudApp"
+  config:
+    activate:
+      on-cloud-platform: "kubernetes"
+```
+
+For application.properties files a special #--- or !--- comment is used to mark the document splits:
+
+```properties
+spring.application.name=MyApp
+#---
+spring.application.name=MyCloudApp
+spring.config.activate.on-cloud-platform=kubernetes
+```
+
+## Production-ready Features / Actuator
+
+Spring Boot includes a number of additional features to help you monitor and manage your application when you push it to production. You can choose to manage and monitor your application by using HTTP endpoints or with JMX. Auditing, health, and metrics gathering can also be automatically applied to your application.
+
+- Actuator 
+- Observability (Spring Boot 3)
+  - Logging
+  - Metrics 
+  - Distributed Tracing
+
+To add the actuator to a Maven-based project, add the following ‘Starter’ dependency:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### Endpoints 
+
+Actuator endpoints let you monitor and interact with your application. Spring Boot includes a number of built-in endpoints and lets you add your own. You can enable or disable each individual endpoint and expose them (make them remotely accessible) over HTTP or JMX.
+
+https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints
+
+- Show actuator tab in IntelliJ (only health is available by default)
+- Enable all endpoints 
+
+```properties
+# enable specific endpoints
+management.endpoints.web.exposure.include=beans,env
+
+# enable all endpoints 
+management.endpoints.web.exposure.include=*
+
+# show health detail
+management.endpoint.health.show-details=always
+```
+
+Health information is collected from Health Contributors. Spring Boot includes a number of auto-configured 
+HealthContributors, and you can also write your own. 
+
+
+### Application Information 
+
+Application information exposes various information collected from all InfoContributor beans defined in your ApplicationContext. Spring Boot includes a number of auto-configured InfoContributor beans, and you can write your own.
+
+```properties
+management.info.java.enabled=true
+management.info.os.enabled=true
+```
 
 ## Logging
 
+What/Why/Logging?
+
 Default configurations are provided for Java Util Logging, Log4j2, and Logback. In each case, loggers are pre-configured to use console output with optional file output also available.
 
-- spring-boot-starter-web -> spring-boot-starter -> spring-boot-starter-logging
+- Examine how this included by default 
+  - `spring-boot-starter-web` -> `spring-boot-starter` -> `spring-boot-starter-logging`
+  - Logback is the default
+  - You can change this, check out the documentation
 
 ```xml
   <dependencies>
@@ -122,26 +229,24 @@ Default configurations are provided for Java Util Logging, Log4j2, and Logback. 
   </dependencies>
 ```
 
-The following items are output:
+Run the application and view the console. The following items are output:
 
-- Date and Time: Millisecond precision and easily sortable.
-- Log Level: ERROR, WARN, INFO, DEBUG, or TRACE.
-- Process ID.
-- A --- separator to distinguish the start of actual log messages.
-- Thread name: Enclosed in square brackets (may be truncated for console output).
-- Logger name: This is usually the source class name (often abbreviated).
-- The log message.
+- **Date and Time:** Millisecond precision and easily sortable.
+- **Log Level:** ERROR, WARN, INFO, DEBUG, or TRACE.
+- **Process ID**
+- **A --- separator** to distinguish the start of actual log messages.
+- **Thread name:** Enclosed in square brackets (may be truncated for console output).
+- **Logger name:** This is usually the source class name (often abbreviated).
+- **The log message**
+
+### Debug
 
 The default log configuration echoes messages to the console as they are written. By default, ERROR-level, WARN-level, and INFO-level messages are logged. You can also enable a “debug” mode by starting your application with a --debug flag.
 
-- program arguemnts --debug
+- program arguments --debug
 - debug=true
 
 When the debug mode is enabled, a selection of core loggers (embedded container, Hibernate, and Spring Boot) are configured to output more information. Enabling the debug mode does not configure your application to log all messages with DEBUG level.
-
-Alternatively, you can enable a “trace” mode by starting your application with a --trace flag (or trace=true in your application.properties). Doing so enables trace logging for a selection of core loggers (embedded container, Hibernate schema generation, and the whole Spring portfolio).
-
-logging.file.name=runnerz.log
 
 ### Log Levels
 
@@ -153,9 +258,12 @@ logging.level.org.springframework.web=debug
 logging.level.org.hibernate=error
 ```
 
-```properties
-logging.level.org.codemash.runnerz.Application=trace
-```
+### Adding your own Logging Statements
+
+- SLF4j
+- IntelliJ Templates
+- Different Logging Levels for different profiles
+- Update logging levels via properties & at runtime
 
 ```java
 @SpringBootApplication
@@ -174,22 +282,24 @@ public class Application {
 }
 ```
 
-this is important - when we get to configuration and profiles
-different levels for different environments
-
-
-open up the console and show the logger name
-
-changing the logging level at runtime
+You can use the actuators loggers endpoint to update logging configuration at runtime:
 
 http://localhost:8080/actuator/loggers
 http://localhost:8080/actuator/loggers/org.codemash.runnerz.Application
 
+```bash
 http :8080/actuator/loggers/org.codemash.runnerz.Application configuredLevel=TRACE
+```
 
-actuator
-management.endpoints.web.exposure.include=*
+### Logging to a file
 
+```properties
+logging.file.name=runnerz.log
+```
+
+### Logback Configuration 
+
+Create a new file `logback-spring.xml` and make sure to include `base.xml` or you will have no logging at all.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -204,5 +314,61 @@ management.endpoints.web.exposure.include=*
 
 ## DevTools
 
-- What are the Spring Boot DevTools? 
-- How to enable automatic builds in IntelliJ
+Spring Boot includes an additional set of tools that can make the application development experience a little more pleasant. The spring-boot-devtools module can be included in any project to provide additional development-time features.
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+        <optional>true</optional>
+    </dependency>
+</dependencies>
+```
+
+- Property Defaults
+- Automatic Restarts
+
+### Property Defaults 
+
+Several of the libraries supported by Spring Boot use caches to improve performance. For example, template engines cache compiled templates to avoid repeatedly parsing template files. Also, Spring MVC can add HTTP caching headers to responses when serving static resources.
+
+While caching is very beneficial in production, it can be counter-productive during development, preventing you from seeing the changes you just made in your application. For this reason, spring-boot-devtools disables the caching options by default.
+
+- server.error.include-binding-errors: always
+- server.error.include-message: always 
+- server.error.include-stacktrace: always 
+- server.servlet.jsp.init-parameters.development: true
+- server.servlet.session.persistent: true  
+- spring.freemarker.cache:false
+- spring.graphql.graphiql.enabled: true  
+- spring.groovy.template.cache:false
+- spring.h2.console.enabled: true  
+- spring.mustache.servlet.cache:false
+- spring.mvc.log-resolved-exception: true  
+- spring.reactor.debug: true  
+- spring.template.provider.cache:false
+- spring.thymeleaf.cache:false
+- spring.web.resources.cache.period: 0
+- spring.web.resources.chain.cache:false
+
+https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools.property-defaults
+
+
+### Automatic Restarts
+
+Applications that use spring-boot-devtools automatically restart whenever files on the classpath change. This can be a useful feature when working in an IDE, as it gives a very fast feedback loop for code changes. By default, any entry on the classpath that points to a directory is monitored for changes. Note that certain resources, such as static assets and view templates, do not need to restart the application.
+
+![IntelliJ + DevTools](./images/devtools_restart_01.png)
+
+![IntelliJ + DevTools](./images/devtools_restart_02.png)
+
+By default, each time your application restarts, a report showing the condition evaluation delta is logged.
+
+```properties
+spring.devtools.restart.log-condition-evaluation-delta=false
+```
+
+#### Restart vs Reload
+
+The restart technology provided by Spring Boot works by using two classloaders. Classes that do not change (for example, those from third-party jars) are loaded into a base classloader. Classes that you are actively developing are loaded into a restart classloader. When the application is restarted, the restart classloader is thrown away and a new one is created. This approach means that application restarts are typically much faster than “cold starts”, since the base classloader is already available and populated.
