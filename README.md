@@ -15,14 +15,14 @@ iteration of it we will use it track indoor and outdoor runs.
 - Connect to a database
 - Deploy a Spring Boot application into production
 
-## Prerequsites
+## Prerequisites
 
 - Beginner / Intermediate Java experience
 - Experience with Java Build Tools (Maven or Gradle)
 - Software
   - Java 17 JDK
-  - IDE or Text Editor for Java Develoopment
-    - IntelliJ IDEA Ultimate 2022.3
+  - IDE or Text Editor for Java Development
+    - [IntelliJ IDEA Ultimate 2022.3](https://www.jetbrains.com/idea/download/)
       - This is what we are using (30 day trail)
       - Community Edition (Has some limitations)
     - Visual Studio Code
