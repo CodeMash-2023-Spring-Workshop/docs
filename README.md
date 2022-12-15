@@ -72,17 +72,12 @@ iteration of it we will use it track indoor and outdoor runs.
     - View the application / browser & command-line
 - Core Fundamentals & Features (1hr)
   - Structuring your code
-    - Main Application in root package above other classes
-    - Architecture (Layered/Hexigonal/)
+  - Spring IoC Container / Application Context
   - Spring Beans
-    - @Component / @Controller / @RestController / @Service / @Repository
-    - @Bean
-  - Application Context
-  - Dependency Injection & IoC
+  - Dependency Injection
   - Configuration
-    - Externalized Configuration (Property Sources)
-    - application.properties / application.yml
   - Profiles
+  - Actuator
   - Logging
   - DevTools
 - Spring Web (MVC) (1 hr)
