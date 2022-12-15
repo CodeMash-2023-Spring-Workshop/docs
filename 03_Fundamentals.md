@@ -42,6 +42,20 @@ The `org.springframework.context.ApplicationContext` interface represents the Sp
 - View the classes it inherits from (superclasses)`
 - The configuration metadata is represented in XML, Java annotations, or Java code.
 
+```java
+@SpringBootApplication
+public class Application {
+	
+	public static void main(String[] args) {
+		ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
+		Arrays.stream(context.getBeanDefinitionNames()).forEach(System.out::println);
+	}
+	
+}
+```
+
+You can view the beans in the `ApplicationContext` from IntelliJ's Spring Windows
+
 ## Spring Beans
 
 A Spring IoC container manages one or more beans. These beans are created with the configuration metadata that you supply to the container.
@@ -70,9 +84,84 @@ earlier.
 Now that you understand what Beans and the container are we can talk about Dependency Injection (DI) and Inversion of
 Control (IoC). Dependency injection (DI) is a process whereby objects define their dependencies (that is, the other objects with which they work) only through constructor arguments, arguments to a factory method, or properties that are set on the object instance after it is constructed or returned from a factory method. The container then injects those dependencies when it creates the bean.
 
-- Demo 
-- Write a test
+- `RunController` depends on -> `RunService`
+- Unit Test the controller
 - `@Autowired`
+
+```java
+public record Run(Integer id, String title) {
+}
+```
+
+```java
+@RestController
+public class RunController {
+
+    private final RunService runService;
+
+    public RunController() {
+        runService = new RunService();
+    }
+
+    public List<Run> findAll() {
+        return runService.findAll();
+    }
+
+}
+```
+
+```java
+class RunControllerTest {
+
+    RunController controller;
+
+    @BeforeEach
+    void setUp() {
+        controller = new RunController();
+    }
+
+    @Test
+    void shouldFindAllRuns() {
+        Assertions.assertEquals(1,controller.findAll().size());
+    }
+
+}
+```
+
+There are 3 types of DI but only 2 of them are recommended: 
+
+1. Constructor-based Dependency Injection
+2. Setter-based Dependency Injection
+3. Field-based Dependency Injection
+
+Now that we have correctly setup Dependency Injection we could mock out the `RunService`: 
+
+```java
+@SpringBootTest
+class RunControllerTest {
+
+    RunController controller;
+
+    @MockBean
+    RunService runService;
+
+    private List<Run> runs = new ArrayList<>();
+
+    @BeforeEach
+    void setUp() {
+        controller = new RunController(runService);
+        runs.add(new Run(1,"Monday Morning Run"));
+    }
+
+    @Test
+    void shouldFindAllRuns() {
+        Mockito.when(runService.findAll()).thenReturn(runs);
+        Assertions.assertEquals(1,controller.findAll().size());
+    }
+
+}
+```
+
 
 [Spring Constructor Injection: Why is it the recommended approach to Dependency Injection?](https://youtu.be/aX-bgylmprA)
 
