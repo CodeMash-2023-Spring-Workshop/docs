@@ -95,18 +95,18 @@ iteration of it we will use it track indoor and outdoor runs.
     - CORS
   - Error Handling
   - Data Validation
-- Data (1 hr)
-- What is Spring Data?
-  - Spring Data Modules
-  - JPA vs JDBC
-- Configuring a datasource
-  - H2 In-Memory DB
-  - PostgreSQL
-  - Logging / Debugging
-- Spring Data JDBC
-- Spring Data Repositories
-- DDL Script
-- Populate Database (CommandLineRunner)
+- Database (1 hr)
+  - What is Spring Data?
+    - Spring Data Modules
+    - JPA vs JDBC
+  - Configuring a datasource
+    - H2 In-Memory DB
+    - PostgreSQL
+    - Logging / Debugging
+  - Spring Data JDBC
+  - Spring Data Repositories
+  - DDL Script
+  - Populate Database (CommandLineRunner)
 - Spring to Production (15 min)
   - Jar
   - Containers
