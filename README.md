@@ -96,21 +96,18 @@ iteration of it we will use it track indoor and outdoor runs.
   - Configuring a Datasource
     - H2
     - PostgreSQL
-    - Logging / Debugging
+  - Populate a Database
+    - DDL Script
+    - Programmatically
   - JDBC Template
   - Spring Data
     - Spring Data Modules
     - Spring Boot Starters
   - Spring Data JDBC
     - Dependencies
-    - Entities
+    - Persistent Entities
     - Repositories
-    - Populate a Database
-      - DDL Script
-      - `CommandLineRunner`
-    - PostgreSQL
-    - Testing
-- Spring to Production (15 min)
+- Spring to Production
   - Jar
   - Containers
   - Native Images using GraalVM

@@ -18,7 +18,16 @@ https://github.com/CodeMash-2023-Spring-Workshop/hello-jdbc
 Spring provides a starter that gives us a database Connectivity API that defines how a client may connect and query 
 a database. To get started head over to start.spring.io and select `JDBC API` from the dependency's dropdown. 
 
-Starter for using JDBC with the HikariCP connection pool: 
+This isn't Spring Data - We will cover that later
+
+org.springframework.jdbc.core; -> [API Documentation](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/package-summary.html)
+
+- start.spring.io
+- Checkout the branch `spring-jdbc-start` in the runnerz app
+  - This should be a continuation of what they saw in the REST API lecture 
+  - There is a `spring-jdbc-complete` If you just want to watch
+
+Add the following dependencies to `pom.xml`:
 
 ```xml
 <dependencies>
@@ -26,35 +35,126 @@ Starter for using JDBC with the HikariCP connection pool:
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-jdbc</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 </dependencies>
 ```
-
-This isn't Spring Data - We will cover that later
-
-org.springframework.jdbc.core; view docs -> https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/package-summary.html
-Provides the core JDBC framework, based on JdbcTemplate and its associated callback interfaces and helper objects. 
-JDBC Template - It simplifies the use of JDBC and helps to avoid common errors.
-https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html
-
-- create a new branch on the runnerz app (spring-jdbc-start)
-- add spring-boot-starter-jdbc
-- add h2 database dependency
 
 ## Configuring a Datasource 
 
 Java’s `javax.sql.DataSource` interface provides a standard method of working with database connections. Traditionally, a 'DataSource' uses a URL along with some credentials to establish a database connection.
 
-It is often convenient to develop applications by using an in-memory embedded database. Obviously, in-memory databases do not provide persistent storage. You need to populate your database when your application starts and be prepared to throw away data when your application ends.
+It is often convenient to develop applications by using an in-memory embedded database. Obviously, in-memory databases do not provide persistent storage. You need to populate your database when your application starts and be prepared to throw away data when your application ends. 
 
-In-Memory is great for rapid prototyping / testing (traditionally) 
+In-Memory is great for:
 
-- H2 In-Memory DB
-- PostgreSQL
-- Logging / Debugging
+- Rapid prototyping 
+- Demos
+- Testing (traditionally)
+
+```properties
+spring.h2.console.enabled=true
+spring.datasource.name=runnerz
+spring.datasource.generate-unique-name=false
+```
+
+NOTE: HikariCP Connection Pool
+
+### PostgreSQL
+
+While getting started with an in-memory embedded database is trivial, what about a "real" database?
+
+```xml
+<dependencies>
+  <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.23</version>
+  </dependency>
+</dependency>
+```
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=password
+```
+
+## Populating a Database
+
+You have a few options for populating a database: 
+
+- DDL Script 
+- Programmatically
+- Database Migration Tool
+
+#### DDL Script
+
+```properties
+spring.sql.init.schema-locations=
+spring.sql.init.mode=always
+```
+
+```sql
+CREATE TABLE IF NOT EXISTS Run (
+    id INT AUTO_INCREMENT,
+    title varchar(250) NOT NULL,
+    started_on timestamp NOT NULL,
+    completed_on timestamp NOT NULL,
+    miles INT NOT NULL,
+    location varchar(10) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO Run(title,started_on,completed_on,miles,location)
+VALUES ('Monday Morning Run',CURRENT_TIMESTAMP(),TIMESTAMPADD('minute',30,CURRENT_TIMESTAMP()),3,'INDOOR');
+
+INSERT INTO Run(title,started_on,completed_on,miles,location)
+VALUES ('Tuesday Evening Run',CURRENT_TIMESTAMP(),TIMESTAMPADD('minute',60,CURRENT_TIMESTAMP()),6,'INDOOR');
+```
+
+Run the application and then set the following property and rerun the application: 
+
+```properties
+logging.level.org.springframework.jdbc=DEBUG
+```
+
+#### Programmatically
+
+You can use the `CommandLineRunner` Interface which is used to indicate that a bean should _run_ when it is contained within
+* a **SpringApplication**. We aren't going to be able to insert data just yet but I want to show you 2 approaches. 
+
+```java
+@Component
+public class DataInit implements CommandLineRunner {
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println("Application has started!");
+    }
+}
+```
+
+```java
+@Bean
+CommandLineRunner commandLineRunner() {
+    return (args) -> System.out.println("Hello, Application!");
+}
+```
+
+#### Database Migration Tool
+
+We aren't going to cover this option in this workshop but a popular tool for this is [Flyway](https://flywaydb.org/)
 
 ## JDBC Template
 
-Spring’s JdbcTemplate and NamedParameterJdbcTemplate classes are auto-configured, and you can @Autowire them directly into your own beans, as shown in the following example:
+Spring’s [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) and NamedParameterJdbcTemplate classes are auto-configured, and you can @Autowire them directly into your own beans. 
+
+**Notes:** 
+  - Discuss [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) vs [NamedParameterJdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/namedparam/NamedParameterJdbcTemplate.html)
+  - Assigning dynamic parameters "where id = ?" vs "where id = :id"
 
 ```java
 @Service
@@ -69,8 +169,7 @@ public class RunService {
 
 }
 ```
-
-https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html
+This is the final code for the `RunService` that contains all of the CRUD operations using a `JdbcTemplate`.
 
 ```java
 @Service
@@ -135,6 +234,17 @@ public class RunService {
 }
 ```
 
+### Command Line Runner 
+
+Now that you have a service that can create a new `Run` lets revisit that `CommandLineRunner`.
+
+```java
+@Bean
+CommandLineRunner commandLineRunner(RunService runService) {
+    return (args) -> runService.create(new Run(null,"Sunday Morning Run", LocalDateTime.now(),LocalDateTime.now().plus(70, ChronoUnit.MINUTES),7, Location.OUTDOOR));
+}
+```
+
 ## Spring Data
 
 Spring Data’s mission is to provide a familiar and consistent, Spring-based programming model for data access while still retaining the special traits of the underlying data store.
@@ -182,15 +292,18 @@ If you want to get an idea of starter support head over to start.spring.io -> De
 
 ## Spring Data JDBC
 
-Spring Data JDBC, part of the larger Spring Data family, makes it easy to implement JDBC based repositories. This module deals with enhanced support for JDBC based data access layers. It makes it easier to build Spring powered applications that use data access technologies.
+Spring Data JDBC, part of the larger Spring Data family, makes it easy to implement JDBC based repositories. This module deals with enhanced support for JDBC based data access layers. It makes it easier to build Spring powered applications that use data access technologies. Spring Data JDBC aims at being conceptually easy. In order to achieve this it does NOT offer caching, lazy loading, write behind or many other features of JPA. This makes Spring Data JDBC a simple, limited, opinionated ORM.
 
-Spring Data JDBC aims at being conceptually easy. In order to achieve this it does NOT offer caching, lazy loading, write behind or many other features of JPA. This makes Spring Data JDBC a simple, limited, opinionated ORM.
+All Spring Data modules are inspired by the concepts of "repository", "aggregate", and "aggregate root" from Domain Driven Design. These are possibly even more important for Spring Data JDBC, because they are, to some extent, contrary to normal practice when working with relational databases.
+
+[Spring Data JDBC Tutorial](https://youtu.be/l_T0nQNbFiM)
 
 ### Dependencies 
 
 - start.spring.io
   - If you were creating a new project from scratch
 - Existing Project
+  - Checkout branch (spring-data-jdbc-start)
   - Spring Data JDBC
   - Database (H2)
 - Start with the previous code that used the `spring-boot-starter-jdbc`
@@ -198,6 +311,7 @@ Spring Data JDBC aims at being conceptually easy. In order to achieve this it do
   - this still includes h2 database
 
 ```xml
+<dependencies>
   <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jdbc</artifactId>
@@ -207,40 +321,48 @@ Spring Data JDBC aims at being conceptually easy. In order to achieve this it do
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
   </dependency>
+</dependencies>
 ```
 
-```properties
-spring.datasource.name=runnerz
-spring.datasource.generate-unique-name=false
-spring.h2.console.enabled=true
-```
+### Persistent Entities
 
-### Entities
+Before we start writing some code lets talk about some terms you will encounter: 
 
-- Model
+- **DTO**: A class whose purpose is to transfer data, usually from the server to the client (or vie versa).
+- **Entity**: A class whose purpose is to store/retrieve data to/from a data store.
+- **POJO**: A class that doesn't extend any framework code not has any sort of restrictions baked into it. 
+
+* Thank you to Greg Turnquist's new book [Learning Spring Boot 3.0](https://amzn.to/3Z8b8h4) for defining those terms for us.
+
   - ID
     - @Id
     - Generation
   - Custom table names
   - Custom column names
 
+There is a lot more that goes into building out your entities and we have only scratched the surface.
+
+https://docs.spring.io/spring-data/jdbc/docs/current/reference/html/#jdbc.entity-persistence
+
 ### Repositories
 
+The goal of the Spring Data repository abstraction is to significantly reduce the amount of boilerplate code required to implement data access layers for various persistence stores. 
 
-How many times have you been asked on a project...
-- Write a query to do x,y and z and sort it by A & B
-
-The repository proxy has two ways to derive a store-specific query from the method name:
-- By deriving the query from the method name directly.
-- By using a manually defined query.
-
-
-https://docs.spring.io/spring-data/commons/docs/current/reference/html/#repositories.query-methods.query-creation
-https://docs.spring.io/spring-data/commons/docs/current/reference/html/#appendix.query.method.subject
+In the example you are working on today you need to provide CRUD operations for a single
+entity. Even working on a single entity there is a lot of boilerplate code that has to be written before you get to the critical 
+business requirements you have been given. How many times have you been a project and asked to write a query to do x,y,and z sort it by these fields and oh ya please only return 10 records at a time.
 
 - CRUD & ListCrudRepository
 - Repository
 - PagingAndSorting & ListPagingAndSorting
+
+The repository proxy has two ways to derive a store-specific query from the method name:
+
+- By deriving the query from the method name directly.
+  - [Query Creation](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#repositories.query-methods.query-creation)
+  - [Supported query method subject keywords](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#appendix.query.method.subject)
+- By using a manually defined query.
+
 - Query derivation (FindBy)
   - findAllByTitleStartsWith
   - findRunsByLocation
@@ -252,20 +374,12 @@ https://docs.spring.io/spring-data/commons/docs/current/reference/html/#appendix
   - listRunsWhereMilesEquals
   - Java Text Blocks
 
+**Further Reading**:
+- [Query By Example](https://docs.spring.io/spring-data/jdbc/docs/current/reference/html/#query-by-example)
+- [Lifecycle Events](https://docs.spring.io/spring-data/jdbc/docs/current/reference/html/#jdbc.events)
+- [Transactions](https://docs.spring.io/spring-data/jdbc/docs/current/reference/html/#jdbc.transactions)
+- [Auditing](https://docs.spring.io/spring-data/jdbc/docs/current/reference/html/#auditing)
 
-Query By Example
-QueryDSL
-
-### Populate a Database
-
-- DDL Script
-- CommandLineRunner
-
-### PostgreSQL 
-
-PostgreSQL example
-using docker?
-
-### Testing
-
-
+Note: 
+If we have time we can talk about create a repository that all other repositories extend from by using 
+the `@NoRepositoryBean` annotation.
