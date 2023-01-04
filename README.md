@@ -31,6 +31,7 @@ iteration of it we will use it track indoor and outdoor runs.
     - [Postman](https://www.postman.com/product/rest-client/)
     - [HTTPie](https://httpie.io/)
     - [curl](https://curl.se/)
+  - Docker Desktop (not required)
 
 ## Agenda
 
@@ -108,8 +109,6 @@ iteration of it we will use it track indoor and outdoor runs.
     - Persistent Entities
     - Repositories
 - Spring to Production
-  - Jar
+  - Executable Jar
   - Containers
   - Native Images using GraalVM
-    - Environment Variables
-  - Single Page deployment instructions
