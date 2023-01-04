@@ -34,7 +34,7 @@ iteration of it we will use it track indoor and outdoor runs.
 
 ## Agenda
 
-- Introduction (30 min)
+- Introduction
   - Who are we
   - Spring Office Hours
   - Agenda
@@ -59,7 +59,7 @@ iteration of it we will use it track indoor and outdoor runs.
     - Github Repository
     - Source Code + Slides Repo
     - Provide a list of resources (cover this)
-- Getting Started (15 min)
+- Getting Started
   - start.spring.io
   - Examine pom.xml
     - Spring Boot Starters
@@ -70,7 +70,7 @@ iteration of it we will use it track indoor and outdoor runs.
     - IDE
     - Maven
     - View the application / browser & command-line
-- Core Fundamentals & Features (1hr)
+- Core Fundamentals & Features
   - Structuring your code
   - Spring IoC Container / Application Context
   - Spring Beans
@@ -80,7 +80,7 @@ iteration of it we will use it track indoor and outdoor runs.
   - Actuator
   - Logging
   - DevTools
-- Spring Web (MVC) (1 hr)
+- Spring Web (MVC)
   - Model View Controller (MVC)
   - Static index.html support
   - Building REST APIs
@@ -90,7 +90,7 @@ iteration of it we will use it track indoor and outdoor runs.
     - CORS
   - Error Handling
   - Data Validation
-- Database (1 hr)
+- Data
   - What is Spring Data?
     - Spring Data Modules
     - JPA vs JDBC
