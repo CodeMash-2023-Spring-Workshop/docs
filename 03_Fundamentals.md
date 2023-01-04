@@ -224,7 +224,7 @@ spring:
 For application.properties files a special #--- or !--- comment is used to mark the document splits:
 
 ```properties
-spring.application.name=MyApp
+# spring.application.name=MyApp
 #---
 spring.application.name=MyCloudApp
 spring.config.activate.on-cloud-platform=kubernetes
@@ -262,7 +262,7 @@ https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#act
 
 ```properties
 # enable specific endpoints
-management.endpoints.web.exposure.include=beans,env
+# management.endpoints.web.exposure.include=beans,env
 
 # enable all endpoints 
 management.endpoints.web.exposure.include=*
