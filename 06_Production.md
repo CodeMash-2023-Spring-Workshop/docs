@@ -1,14 +1,12 @@
 # Production
 
-The path to production is paved with decisions
+The path to production: 
 
 - Executables
-  - JAR 
-  - WAR
 - Containers
 - Native Image
 
-## Package 
+## Executables 
 
 The spring-boot-loader modules lets Spring Boot support executable jar and war files. If you use the Maven plugin or the Gradle plugin, executable jars are automatically generated, and you generally do not need to know the details of how they work.
 
@@ -48,3 +46,9 @@ https://docs.spring.io/spring-boot/docs/current/reference/html/container-images.
 Spring Boot 3
 
 https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image
+
+
+## Notes
+
+- DaShaun and I did a Spring Office Hours on this
+- I have a few videos on getting your Spring Application into production
