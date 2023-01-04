@@ -6,7 +6,7 @@ simplifies each step so that you can focus on building applications.
 
 Spring Boot integrates with a number of data technologies, both SQL and NoSQL.
 
-## SQL Databases
+## Java + SQL Databases
 
 I want to kick off the discussion by taking a trip down memory lane. We are going to take a look at an example
 application to see how we can use JDBC (Java DataBase Connectivity) to connect to a database in Java and execute queries.
@@ -215,7 +215,7 @@ spring.datasource.generate-unique-name=false
 spring.h2.console.enabled=true
 ```
 
-### Model
+### Entities
 
 - Model
   - ID
@@ -256,7 +256,10 @@ https://docs.spring.io/spring-data/commons/docs/current/reference/html/#appendix
 Query By Example
 QueryDSL
 
-### DDL / CommandLineRunner
+### Populate a Database
+
+- DDL Script
+- CommandLineRunner
 
 ### PostgreSQL 
 

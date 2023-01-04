@@ -91,17 +91,25 @@ iteration of it we will use it track indoor and outdoor runs.
   - Error Handling
   - Data Validation
 - Data
-  - What is Spring Data?
-    - Spring Data Modules
-    - JPA vs JDBC
-  - Configuring a datasource
-    - H2 In-Memory DB
+  - Java + SQL Databases
+  - Spring Data JDBC API
+  - Configuring a Datasource
+    - H2
     - PostgreSQL
     - Logging / Debugging
+  - JDBC Template
+  - Spring Data
+    - Spring Data Modules
+    - Spring Boot Starters
   - Spring Data JDBC
-  - Spring Data Repositories
-  - DDL Script
-  - Populate Database (CommandLineRunner)
+    - Dependencies
+    - Entities
+    - Repositories
+    - Populate a Database
+      - DDL Script
+      - `CommandLineRunner`
+    - PostgreSQL
+    - Testing
 - Spring to Production (15 min)
   - Jar
   - Containers
