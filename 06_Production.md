@@ -48,6 +48,10 @@ Spring Boot 3
 https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image
 
 
+## Hosts 
+
+Add the list of hosts where you can deploy your application to here
+
 ## Notes
 
 - DaShaun and I did a Spring Office Hours on this
