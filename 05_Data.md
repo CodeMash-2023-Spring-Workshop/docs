@@ -365,12 +365,11 @@ The repository proxy has two ways to derive a store-specific query from the meth
 - By using a manually defined query.
 
 - Query derivation (FindBy)
-  - findAllByTitleStartsWith
+  - findRunsByTitleStartingWith
   - findRunsByLocation
-  - findAllByMilesIsAndLocationIndoor
+  - findRunsByMilesIsAndLocationIs
   - findAllByStartedOnAfterAndMilesGreaterThan
   - findAllByStartedOnAfterAndMilesGreaterThanEqual
-  - findFirstByLocationOrderByMilesDesc
 - `@Query` manually defining a query
   - listRunsWhereMilesEquals
   - Java Text Blocks
