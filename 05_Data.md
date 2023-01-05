@@ -23,11 +23,13 @@ This isn't Spring Data - We will cover that later
 org.springframework.jdbc.core; -> [API Documentation](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/package-summary.html)
 
 - start.spring.io
+  - JDBC API
+  - H2 Database
 - Checkout the branch `spring-jdbc-start` in the runnerz app
-  - This should be a continuation of what they saw in the REST API lecture 
+  - This is a continuation of what you saw in the REST API lecture
   - There is a `spring-jdbc-complete` If you just want to watch
 
-Add the following dependencies to `pom.xml`:
+The following dependencies were added to `pom.xml`:
 
 ```xml
 <dependencies>
@@ -49,7 +51,7 @@ Java’s `javax.sql.DataSource` interface provides a standard method of working 
 
 It is often convenient to develop applications by using an in-memory embedded database. Obviously, in-memory databases do not provide persistent storage. You need to populate your database when your application starts and be prepared to throw away data when your application ends. 
 
-In-Memory is great for:
+An in-memory embedded database is great for:
 
 - Rapid prototyping 
 - Demos
@@ -150,7 +152,7 @@ We aren't going to cover this option in this workshop but a popular tool for thi
 
 ## JDBC Template
 
-Spring’s [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) and NamedParameterJdbcTemplate classes are auto-configured, and you can @Autowire them directly into your own beans. 
+Spring’s `JdbcTemplate` and `NamedParameterJdbcTemplate` classes are auto-configured, and you can `@Autowire` them directly into your own beans. 
 
 **Notes:** 
   - Discuss [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) vs [NamedParameterJdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/namedparam/NamedParameterJdbcTemplate.html)
@@ -169,7 +171,7 @@ public class RunService {
 
 }
 ```
-This is the final code for the `RunService` that contains all of the CRUD operations using a `JdbcTemplate`.
+This is the final code for the `RunService` that contains all the CRUD operations using a `JdbcTemplate`.
 
 ```java
 @Service
@@ -254,7 +256,7 @@ Spring Data’s mission is to provide a familiar and consistent, Spring-based pr
   - Dynamic query derivation from repository method names
   - Implementation domain base classes providing basic properties
   - Support for transparent auditing (created, last changed)
-  - Possibility to integrate custom repository code e
+  - Possibility to integrate custom repository code
 
 **SQL / NoSQL Support**
 - SQL
@@ -303,12 +305,11 @@ All Spring Data modules are inspired by the concepts of "repository", "aggregate
 - start.spring.io
   - If you were creating a new project from scratch
 - Existing Project
-  - Checkout branch (spring-data-jdbc-start)
+  - Checkout branch `spring-data-jdbc-start`
   - Spring Data JDBC
   - Database (H2)
-- Start with the previous code that used the `spring-boot-starter-jdbc`
-  - This is different from `spring-boot-starter-data-jdbc`
-  - this still includes h2 database
+
+The following dependencies were added to `pom.xml`:
 
 ```xml
 <dependencies>
@@ -352,8 +353,8 @@ In the example you are working on today you need to provide CRUD operations for 
 entity. Even working on a single entity there is a lot of boilerplate code that has to be written before you get to the critical 
 business requirements you have been given. How many times have you been a project and asked to write a query to do x,y,and z sort it by these fields and oh ya please only return 10 records at a time.
 
-- CRUD & ListCrudRepository
 - Repository
+- CRUD & ListCrudRepository
 - PagingAndSorting & ListPagingAndSorting
 
 The repository proxy has two ways to derive a store-specific query from the method name:
@@ -380,6 +381,18 @@ The repository proxy has two ways to derive a store-specific query from the meth
 - [Transactions](https://docs.spring.io/spring-data/jdbc/docs/current/reference/html/#jdbc.transactions)
 - [Auditing](https://docs.spring.io/spring-data/jdbc/docs/current/reference/html/#auditing)
 
-Note: 
-If we have time we can talk about create a repository that all other repositories extend from by using 
-the `@NoRepositoryBean` annotation.
+## Lecture Notes
+
+- Browser Tabs
+  - Lecture Notes
+  - JDBC Core
+  - localhost:8080
+- Hello JDBC
+  - Docker Desktop Running
+- Runnerz
+  - spring-jdbc-start branch
+- Timing
+  - 1st run through about 65 minutes
+  - Didn't get to a lot of the dynamic query derivation examples
+    - Make sure these are all in the completed branch
+  - Live Templates - Create some live templates where we can shorten some things up
