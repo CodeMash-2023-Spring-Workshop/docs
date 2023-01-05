@@ -356,6 +356,7 @@ business requirements you have been given. How many times have you been a projec
 - Repository
 - CRUD & ListCrudRepository
 - PagingAndSorting & ListPagingAndSorting
+- Don't add `@Repository` stereotype marker
 
 The repository proxy has two ways to derive a store-specific query from the method name:
 
