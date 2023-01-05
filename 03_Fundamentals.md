@@ -20,7 +20,7 @@ Creat the following class in /src/main/java - default package:
 import org.springframework.stereotype.Component;
 
 @Component
-public class Message {
+public class WelcomeMessage {
 
     public String getDefaultMessage() {
         return "Hello, Runnerz!";
@@ -32,7 +32,9 @@ public class Message {
 Start the application, this class 'bean' is nowhere to be found. If you move it into a package that is above where your 
 main application class is you will have the same problem. 
 
-`/src/main/java/dev/danvega/Message.java`
+![IntelliJ Beans - WelcomeMessage](./images/intellij_beans_welcome_message.png)
+
+`/src/main/java/org/codemash/runnerz/WelcomeMessage.java`
 
 ## Spring IoC Container / Application Context
 
@@ -67,9 +69,13 @@ A Spring IoC container manages one or more beans. These beans are created with t
   - [Name](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-beanname)
   - [Scopes](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-scopes)
   - more ...
+- @Component
+  - @Controller
+  - @RestController
+  - @Service
+  - @Repository
 - @Bean
   - Create a `@Configuration` class
-- @Component / @Controller / @RestController / @Service / @Repository
 
 Now that you understand what a bean is and the container that manages them we can revisit the problem we took a look at
 earlier. 
@@ -77,7 +83,7 @@ earlier.
 - `@ComponentScan(basePackages = {"dev.danvega"})`
 - `@SpringBootApplication(scanBasePackages = {"dev.danvega"})`
 - `Arrays.stream(context.getBeanDefinitionNames()).forEach(System.out::println);`
-- View the definitions of the Spring beans used in your project, and see how they are related to other beans, in the Spring tool window.
+- You can view the definitions of the Spring beans used in your project, and see how they are related to other beans, in the Spring tool window.
 
 ## Dependency Injection & IoC
 
@@ -162,7 +168,6 @@ class RunControllerTest {
 }
 ```
 
-
 [Spring Constructor Injection: Why is it the recommended approach to Dependency Injection?](https://youtu.be/aX-bgylmprA)
 
 ## Configuration
@@ -171,6 +176,7 @@ Spring Boot lets you externalize your configuration so that you can work with th
 
 - application.properties / application.yml
   -  If you have configuration files with both .properties and .yml format in the same location, .properties takes precedence.
+  - server.port
 - Externalized Configuration (Property Sources)
   - https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config
 - Injecting values into your code
@@ -198,7 +204,6 @@ public class ProductionConfiguration {
   - application-prod.properties
 - Run the application show default profile
 - `spring.profiles.active=dev,local`
-
 
 ### Multi-Document Files
 
@@ -339,7 +344,7 @@ When the debug mode is enabled, a selection of core loggers (embedded container,
 
 ### Log Levels
 
-All the supported logging systems can have the logger levels set in the Spring Environment (for example, in application.properties) by using logging.level.<logger-name>=<level> where level is one of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or OFF. The root logger can be configured by using logging.level.root.
+All the supported logging systems can have the logger levels set in the Spring Environment (for example, in application.properties) by using `logging.level.<logger-name>=<level>` where level is one of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or OFF. The root logger can be configured by using logging.level.root.
 
 ```properties
 logging.level.root=warn
@@ -461,3 +466,12 @@ spring.devtools.restart.log-condition-evaluation-delta=false
 #### Restart vs Reload
 
 The restart technology provided by Spring Boot works by using two classloaders. Classes that do not change (for example, those from third-party jars) are loaded into a base classloader. Classes that you are actively developing are loaded into a restart classloader. When the application is restarted, the restart classloader is thrown away and a new one is created. This approach means that application restarts are typically much faster than “cold starts”, since the base classloader is already available and populated.
+
+
+## Lecture Notes
+
+- Browser Tabs
+  - Fundamentals Lecture Notes
+- IntelliJ
+  - `fundamentals-start` branch
+- 
