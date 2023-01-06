@@ -1,6 +1,6 @@
 # Resources
 
-This is a list of resources we reccomend.
+This is a list of resources we recommend.
 
 ## Documentation 
 
@@ -13,11 +13,24 @@ This is a list of resources we reccomend.
 
 ## Books
 
+- [Spring Boot Up and Running - Mark Heckler](https://amzn.to/3WOSutb)
+- [Learning Spring Boot 3.0 - Greg Turnquist](https://amzn.to/3CuCgxc)
+- [Spring Boot in Action - Craig Walls](https://amzn.to/3ZcI3kx)
+
+## Podcasts
+
+- [Bootiful Podcast - Josh Long](http://bootifulpodcast.fm/)
+
 ## YouTube
 
 - [Dan Vega](https://www.youtube.com/@danvega)
 - [DaShaun Carter](https://www.youtube.com/@dashaun)
-
+- [Spring Boot Learning](https://www.youtube.com/@SpringBootLearning)
+- [Spring Tips](https://www.youtube.com/playlist?list=PLgGXSWYM2FpPw8rV0tZoMiJYSCiLhPnOc)
+- [Spring Developer](https://www.youtube.com/@SpringSourceDev)
+- [Amigoscode](https://www.youtube.com/@amigoscode)
+- [Java Brains](https://www.youtube.com/c/JavaBrainsChannel)
+- [Daily Code Buffer](https://www.youtube.com/@DailyCodeBuffer)
 
 ## Dan & DaShaun
 
