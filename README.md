@@ -109,6 +109,6 @@ iteration of it we will use it track indoor and outdoor runs.
     - Persistent Entities
     - Repositories
 - Spring to Production
-  - Executable Jar
+  - Uber Jar
   - Containers
   - Native Images using GraalVM
