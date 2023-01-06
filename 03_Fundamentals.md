@@ -96,6 +96,24 @@ Control (IoC). Dependency injection (DI) is a process whereby objects define the
 
 ```java
 public record Run(Integer id, String title) {
+    
+}
+```
+
+```java
+@Service
+public class RunService {
+
+    private final List<Run> runs = new ArrayList<>();
+
+    public RunService() {
+        runs.add(new Run(1,"Monday Morning Run"));
+    }
+
+    public List<Run> findAll() {
+        return runs;
+    }
+
 }
 ```
 
@@ -175,27 +193,57 @@ class RunControllerTest {
 Spring Boot lets you externalize your configuration so that you can work with the same application code in different environments. You can use a variety of external configuration sources, include Java properties files, YAML files, environment variables, and command-line arguments.
 
 - application.properties / application.yml
-  -  If you have configuration files with both .properties and .yml format in the same location, .properties takes precedence.
-  - server.port
+  - If you have configuration files with both .properties and .yml format in the same location, .properties takes precedence.
+  - server.port=8085
 - Externalized Configuration (Property Sources)
   - https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config
+  - Run Configuration SERVER.PORT=8081
 - Injecting values into your code
 - Configuration Properties
-- `spring.config.import=optional:secrets.properties`
-- `@Configuration(proxyBeanMethods = false)`
+
+```properties
+greeting.message=Hello, Runnerz!
+```
+
+```java
+@RestController
+public class GreetingController {
+
+    @Value("${greeting.message}")
+    private String welcomeMessage;
+
+    @GetMapping("/")
+    public String home() {
+        return welcomeMessage;
+    }
+
+}
+```
+
+```java
+@ConfigurationProperties("runnerz")
+public record RunnerzConfigProperties(String welcomeMessage, Integer maxRows) {
+}
+```
+
+```java
+@Bean
+CommandLineRunner commandLineRunner(RunnerzConfigProperties props) {
+    return (args) -> {
+        System.out.println(props.welcomeMessage());
+        System.out.println(props.maxRows());
+    };
+}
+```
 
 ## Profiles
 
-Spring Profiles provide a way to segregate parts of your application configuration and make it be available only in certain environments. Any @Component, @Configuration or @ConfigurationProperties can be marked with @Profile to limit when it is loaded, as shown in the following example:
+Spring Profiles provide a way to segregate parts of your application configuration and make it be available only in certain environments. Any `@Component`, `@Configuration` or `@ConfigurationProperties` can be marked with `@Profile` to limit when it is loaded, as shown in the following example:
 
 ```java
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Profile("production")
-public class ProductionConfiguration {
-
-    // ...
-
-}
+public class ProductionConfiguration {}
 ```
 
 - What are profiles
@@ -474,4 +522,3 @@ The restart technology provided by Spring Boot works by using two classloaders. 
   - Fundamentals Lecture Notes
 - IntelliJ
   - `fundamentals-start` branch
-- 
