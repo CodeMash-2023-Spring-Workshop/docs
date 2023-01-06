@@ -45,6 +45,7 @@ As long as you have Docker desktop running you can run the following command to 
 ![Docker Runnerz](./images/docker_runnerz.png)
 
 `docker image ls -a`
+
 `docker run -it -p8080:8080 runnerz:0.0.1-SNAPSHOT`
 
 To learn more about Packaging OCI Images check out the [documentation](https://docs.spring.io/spring-boot/docs/3.0.1/maven-plugin/reference/htmlsingle/#build-image).
