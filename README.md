@@ -89,7 +89,6 @@ iteration of it we will use it track indoor and outdoor runs.
     - CRUD REST API
     - API testing (curl/httpie/postman)
     - CORS
-  - Error Handling
   - Data Validation
 - Data
   - Java + SQL Databases
