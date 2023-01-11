@@ -15,7 +15,7 @@ This is a list of resources we recommend.
 
 - [Spring Boot Up and Running - Mark Heckler](https://amzn.to/3WOSutb)
 - [Learning Spring Boot 3.0 - Greg Turnquist](https://amzn.to/3CuCgxc)
-- [Spring Boot in Action - Craig Walls](https://amzn.to/3ZcI3kx)
+- [Spring Boot in Action - Craig Walls](https://amzn.to/3ZcI3kx) - Use Promo code `ctwcodemash23` for 35% off
 
 ## Podcasts
 
