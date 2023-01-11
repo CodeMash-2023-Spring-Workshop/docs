@@ -391,8 +391,3 @@ The repository proxy has two ways to derive a store-specific query from the meth
   - Docker Desktop Running
 - Runnerz
   - spring-jdbc-start branch
-- Timing
-  - 1st run through about 65 minutes
-  - Didn't get to a lot of the dynamic query derivation examples
-    - Make sure these are all in the completed branch
-  - Live Templates - Create some live templates where we can shorten some things up
